@@ -1,5 +1,6 @@
 package br.com.fourcamp.api_locadora.domain.command;
 
+import br.com.fourcamp.api_locadora.adapter.output.ClienteRepositoryImpl;
 import br.com.fourcamp.api_locadora.port.input.IClienteService;
 import br.com.fourcamp.api_locadora.domain.dto.ClienteDTO;
 import br.com.fourcamp.api_locadora.domain.dto.EnderecoDTO;
@@ -9,6 +10,7 @@ import br.com.fourcamp.api_locadora.port.output.IClienteRepository;
 import br.com.fourcamp.api_locadora.port.output.IEnderecoRepository;
 import br.com.fourcamp.api_locadora.domain.utils.*;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -20,6 +22,10 @@ public class ClienteServiceImpl implements IClienteService {
 
     private final IClienteRepository IClienteRepository;
     private final IEnderecoRepository IEnderecoRepository;
+    @Autowired
+    private ClienteRepositoryImpl clienteRepository;
+
+    private static final DateTimeFormatter DATE_FORMATTER = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 
     public Cliente cadastrarCliente(ClienteDTO clienteDTO){
         validarCliente(clienteDTO);
@@ -27,17 +33,18 @@ public class ClienteServiceImpl implements IClienteService {
         Cliente cliente = new Cliente();
         cliente.setNome(clienteDTO.getNome());
         cliente.setCpf(clienteDTO.getCpf());
-        LocalDate dataNascimento = LocalDate.parse(clienteDTO.getDataNascimento());
+        LocalDate dataNascimento = LocalDate.parse(clienteDTO.getDataNascimento(), DATE_FORMATTER);
         cliente.setDataNascimento(dataNascimento);
-        cliente.setTelefone(cliente.getTelefone());
+        cliente.setTelefone(clienteDTO.getTelefone());
 
+        EnderecoDTO enderecoDTO = clienteDTO.getEnderecoDTO();
         Endereco endereco = new Endereco();
-        endereco.setLogradouro(endereco.getLogradouro());
-        endereco.setNumero(endereco.getNumero());
-        endereco.setBairro(endereco.getBairro());
-        endereco.setCidade(endereco.getCidade());
-        endereco.setUf(endereco.getCidade());
-        endereco.setCep(endereco.getCep());
+        endereco.setLogradouro(enderecoDTO.getLogradouro());
+        endereco.setNumero(enderecoDTO.getNumero());
+        endereco.setBairro(enderecoDTO.getBairro());
+        endereco.setCidade(enderecoDTO.getCidade());
+        endereco.setUf(enderecoDTO.getCidade());
+        endereco.setCep(enderecoDTO.getCep());
 
         Endereco enderecoCliente = IEnderecoRepository.cadastrar(endereco);
 
@@ -59,11 +66,11 @@ public class ClienteServiceImpl implements IClienteService {
             throw new IllegalArgumentException("Formato de data inválido");
         }
 
-        if (IClienteRepository.buscarClientePorCPF(clienteDTO.getCpf()) != null) {
+        if (clienteRepository.buscarClientePorCPF(clienteDTO.getCpf()).isPresent()) {
             throw new IllegalArgumentException("CPF já cadastrado.");
         }
 
-        if (!DataNascimentoValidator.validarMaioridade(LocalDate.parse(clienteDTO.getDataNascimento()))){
+        if (!DataNascimentoValidator.validarMaioridade(LocalDate.parse(clienteDTO.getDataNascimento(), DATE_FORMATTER))){
             throw new IllegalArgumentException("Cliente deve ser maior de idade.");
         }
 
