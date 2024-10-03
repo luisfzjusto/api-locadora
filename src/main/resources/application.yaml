@@ -1,0 +1,14 @@
+spring:
+  application:
+  name: api-locadora
+
+  datasource:
+    url: jdbc:postgresql://localhost:5432/locadora
+    username: postgres
+    password: admin
+    driver-class-name: org.postgresql.Driver
+    hikari:
+      maximum-pool-size: 3
+      minimum-idle: 2
+      idle-timeout: 20000
+      poolName: api-locadora
