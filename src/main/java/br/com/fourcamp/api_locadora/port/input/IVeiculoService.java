@@ -8,11 +8,9 @@ import java.util.Optional;
 
 public interface IVeiculoService {
 
-    Veiculo cadastrarVeiculo(VeiculoDTO veiculoDTO);
+    void cadastrarVeiculo(VeiculoDTO veiculoDTO);
 
     Optional<Veiculo> buscarVeiculoPorPlaca(String placa);
 
-    List<Veiculo> listarVeiculosDisponiveis();
-
-    List<Veiculo> listarVeiculosAlugados();
+    List<Veiculo> listarVeiculosPorStatus(String status);
 }

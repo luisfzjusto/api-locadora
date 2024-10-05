@@ -33,7 +33,7 @@ public class VeiculoRepositoryImpl implements IVeiculoRepository {
     };
 
     @Override
-    public void salvarVeiculo(Veiculo veiculo) {
+    public void cadastrarVeiculo(Veiculo veiculo) {
         String sql = "SELECT cadastrar_veiculo(?,?,?,?,?,?)";
         jdbcTemplate.update(sql, veiculo.getMarca(), veiculo.getModelo(), veiculo.getAno(), veiculo.getPlaca(), veiculo.getDiaria(), veiculo.getCategoria());
     }

@@ -30,16 +30,11 @@ public class VeiculoServiceImpl implements IVeiculoService {
 
     @Override
     public Optional<Veiculo> buscarVeiculoPorPlaca(String placa) {
-        return Optional.empty();
+        return veiculoRepository.buscarVeiculoPorPlaca(placa);
     }
 
     @Override
-    public List<Veiculo> listarVeiculosDisponiveis() {
-        return null;
-    }
-
-    @Override
-    public List<Veiculo> listarVeiculosAlugados() {
-        return null;
+    public List<Veiculo> listarVeiculosPorStatus(String status) {
+        return veiculoRepository.listarVeiculosPorStatus(status);
     }
 }

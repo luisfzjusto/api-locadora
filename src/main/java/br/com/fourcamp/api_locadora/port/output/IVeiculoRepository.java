@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.Optional;
 
 public interface IVeiculoRepository {
-    void salvarVeiculo(Veiculo veiculo);
+    void cadastrarVeiculo(Veiculo veiculo);
 
     Optional<Veiculo> buscarVeiculoPorPlaca(String placa);
 
