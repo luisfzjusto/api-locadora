@@ -1,6 +1,7 @@
 package br.com.fourcamp.api_locadora.domain.command;
 
 import br.com.fourcamp.api_locadora.adapter.output.ClienteRepositoryImpl;
+import br.com.fourcamp.api_locadora.domain.exception.ValidationException;
 import br.com.fourcamp.api_locadora.port.input.IClienteService;
 import br.com.fourcamp.api_locadora.domain.dto.ClienteDTO;
 import br.com.fourcamp.api_locadora.domain.dto.EnderecoDTO;
@@ -15,6 +16,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -53,54 +55,59 @@ public class ClienteServiceImpl implements IClienteService {
         return IClienteRepository.cadastrar(cliente);
     }
 
+    @Override
+    public Optional<Cliente> buscarClientePorCPF(String cpf){
+        return clienteRepository.buscarClientePorCPF(cpf);
+    }
+
     private void validarCliente(ClienteDTO clienteDTO) {
         if (!NomeValidator.validarNome(clienteDTO.getNome())) {
-            throw new IllegalArgumentException("Nome inválido. Deve conter, no mínimo, 10 caracteres.");
+            throw new ValidationException("Nome inválido. Deve conter, no mínimo, 10 caracteres.");
         }
 
         if (!CPFValidator.validarCPF(clienteDTO.getCpf())) {
-            throw new IllegalArgumentException("CPF inválido.");
+            throw new ValidationException("CPF inválido.");
         }
 
         if(!DataNascimentoValidator.validarFormatoData(clienteDTO.getDataNascimento().toString())){
-            throw new IllegalArgumentException("Formato de data inválido");
+            throw new ValidationException("Formato de data inválido");
         }
 
         if (clienteRepository.buscarClientePorCPF(clienteDTO.getCpf()).isPresent()) {
-            throw new IllegalArgumentException("CPF já cadastrado.");
+            throw new ValidationException("CPF já cadastrado.");
         }
 
         if (!DataNascimentoValidator.validarMaioridade(LocalDate.parse(clienteDTO.getDataNascimento(), DATE_FORMATTER))){
-            throw new IllegalArgumentException("Cliente deve ser maior de idade.");
+            throw new ValidationException("Cliente deve ser maior de idade.");
         }
 
         if (!TelefoneValidator.validarTelefone(clienteDTO.getTelefone())) {
-            throw new IllegalArgumentException("Telefone inválido.");
+            throw new ValidationException("Telefone inválido.");
         }
 
         EnderecoDTO endereco = clienteDTO.getEnderecoDTO();
         if (!LogradouroValidator.validarLogradouro(endereco.getLogradouro())) {
-            throw new IllegalArgumentException("Logradouro inválido.");
+            throw new ValidationException("Logradouro inválido.");
         }
 
         if (!NumeroValidator.validarNumero(endereco.getNumero())) {
-            throw new IllegalArgumentException("Número inválido.");
+            throw new ValidationException("Número inválido.");
         }
 
         if (!BairroValidator.validarBairro(endereco.getBairro())) {
-            throw new IllegalArgumentException("Bairro inválido.");
+            throw new ValidationException("Bairro inválido.");
         }
 
         if (!CidadeValidator.validarCidade(endereco.getCidade())) {
-            throw new IllegalArgumentException("Cidade inválida.");
+            throw new ValidationException("Cidade inválida.");
         }
 
         if (!UFValidator.validarUF(endereco.getUf())) {
-            throw new IllegalArgumentException("UF inválida.");
+            throw new ValidationException("UF inválida.");
         }
 
         if (!CEPValidator.validarCEP(endereco.getCep())) {
-            throw new IllegalArgumentException("CEP inválido.");
+            throw new ValidationException("CEP inválido.");
         }
     }
 }

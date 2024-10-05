@@ -17,7 +17,8 @@ public class EnderecoRepositoryImpl implements IEnderecoRepository {
     @Override
     public Endereco cadastrar(Endereco endereco){
         String sql = "SELECT cadastrar_endereco(?, ?, ?, ?, ?, ?)";
-        jdbcTemplate.update(sql, endereco.getLogradouro(), endereco.getNumero(), endereco.getBairro(), endereco.getCidade(), endereco.getUf(), endereco.getCep());
+        Integer id = jdbcTemplate.queryForObject(sql, Integer.class, endereco.getLogradouro(), endereco.getNumero(), endereco.getBairro(), endereco.getCidade(), endereco.getUf(), endereco.getCep());
+        endereco.setId(Long.valueOf(id));
         return endereco;
     }
 

@@ -11,6 +11,4 @@ public interface IClienteRepository {
 
     Optional<Cliente> buscarClientePorCPF(String cpf);
 
-    List<Cliente> listarClientes();
-
 }
