@@ -24,7 +24,7 @@ public class VeiculoController {
         return ResponseEntity.status(HttpStatus.CREATED).body("Veículo cadastrado com sucesso!");
     }
 
-    @GetMapping("/{placa}")
+    @GetMapping("/placa/{placa}")
     public ResponseEntity<?> buscarClientePorPlaca(@PathVariable String placa){
         Optional<Veiculo> veiculo = veiculoServiceimpl.buscarVeiculoPorPlaca(placa);
         if (veiculo.isPresent()){
@@ -34,7 +34,7 @@ public class VeiculoController {
         }
     }
 
-    @GetMapping("{status}")
+    @GetMapping("/status/{status}")
     public ResponseEntity<?> listarVeiculosPorStatus(@PathVariable String status){
         List<Veiculo> veiculos = veiculoServiceimpl.listarVeiculosPorStatus(status);
         if(veiculos.isEmpty()){

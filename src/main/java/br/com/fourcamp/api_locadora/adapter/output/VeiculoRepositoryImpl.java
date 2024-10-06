@@ -26,7 +26,7 @@ public class VeiculoRepositoryImpl implements IVeiculoRepository {
         veiculo.setModelo(rs.getString("modelo"));
         veiculo.setAno(rs.getInt("ano"));
         veiculo.setPlaca(rs.getString("placa"));
-        veiculo.setDiaria(rs.getDouble("diaria"));
+        veiculo.setDiaria(rs.getDouble("preco_por_dia"));
         veiculo.setCategoria(rs.getString("categoria"));
         veiculo.setStatus(rs.getString("status"));
         return veiculo;
@@ -35,7 +35,8 @@ public class VeiculoRepositoryImpl implements IVeiculoRepository {
     @Override
     public void cadastrarVeiculo(Veiculo veiculo) {
         String sql = "SELECT cadastrar_veiculo(?,?,?,?,?,?)";
-        jdbcTemplate.update(sql, veiculo.getMarca(), veiculo.getModelo(), veiculo.getAno(), veiculo.getPlaca(), veiculo.getDiaria(), veiculo.getCategoria());
+        Long veiculoId = jdbcTemplate.queryForObject(sql, Long.class, veiculo.getMarca(), veiculo.getModelo(), veiculo.getAno(), veiculo.getPlaca(), veiculo.getDiaria(), veiculo.getCategoria());
+        veiculo.setId(veiculoId);
     }
 
     @Override
