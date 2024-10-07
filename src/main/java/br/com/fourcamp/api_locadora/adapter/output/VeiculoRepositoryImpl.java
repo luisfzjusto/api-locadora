@@ -51,4 +51,10 @@ public class VeiculoRepositoryImpl implements IVeiculoRepository {
         String sql = "SELECT * FROM listar_veiculos_por_status(?)";
         return jdbcTemplate.query(sql, veiculoMapper, status);
     }
+
+    @Override
+    public void atualizarVeiculo(Veiculo veiculo){
+        String sql = "SELECT atualizar_veiculo(?, ?)";
+        jdbcTemplate.update(sql, veiculo.getId(), veiculo.getStatus());
+    }
 }

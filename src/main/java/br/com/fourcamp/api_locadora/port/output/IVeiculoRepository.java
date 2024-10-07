@@ -8,6 +8,8 @@ import java.util.Optional;
 public interface IVeiculoRepository {
     void cadastrarVeiculo(Veiculo veiculo);
 
+    void atualizarVeiculo(Veiculo veiculo);
+
     Optional<Veiculo> buscarVeiculoPorPlaca(String placa);
 
     List<Veiculo> listarVeiculosPorStatus(String status);

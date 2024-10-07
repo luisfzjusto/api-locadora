@@ -14,6 +14,7 @@ public class ContaLocadoraRepositoryImpl implements IContaLocadoraRepository {
     @Autowired
     private JdbcTemplate jdbcTemplate;
 
+
     @Override
     public void atualizarSaldo(ContaLocadora contaLocadora) {
         String sql = "SELECT atualizar_saldo_locadora(?)";

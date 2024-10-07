@@ -24,4 +24,4 @@ public class ReservaController {
         return ResponseEntity.status(HttpStatus.CREATED).body("Reserva realizada com sucesso!");
     }
 }
-}
+
