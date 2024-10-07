@@ -5,6 +5,9 @@ import br.com.fourcamp.api_locadora.domain.dto.ReservaDTO;
 import br.com.fourcamp.api_locadora.domain.entity.Cliente;
 import br.com.fourcamp.api_locadora.domain.entity.Reserva;
 import br.com.fourcamp.api_locadora.domain.entity.Veiculo;
+import br.com.fourcamp.api_locadora.domain.strategy.AnualStrategy;
+import br.com.fourcamp.api_locadora.domain.strategy.DiariaStrategy;
+import br.com.fourcamp.api_locadora.domain.strategy.MensalStrategy;
 import br.com.fourcamp.api_locadora.domain.strategy.PricingStrategy;
 import br.com.fourcamp.api_locadora.port.input.IContaLocadoraService;
 import br.com.fourcamp.api_locadora.port.input.IReservaService;
@@ -40,6 +43,8 @@ public class ReservaServiceImpl implements IReservaService {
         }
         Cliente cliente = clienteOptional.get();
 
+        PricingStrategy pricingStrategy = selecionarEstrategia(reservaDTO.getTipoReserva());
+
         double valorTotal = pricingStrategy.calcularPreco(veiculo.getDiaria(), reservaDTO.getQuantidade());
 
         contaLocadoraService.adicionarSaldo(valorTotal);
@@ -49,5 +54,17 @@ public class ReservaServiceImpl implements IReservaService {
 
         Reserva reserva = new Reserva(cliente, veiculo, reservaDTO.getTipoReserva(), reservaDTO.getQuantidade());
         reservaRepository.salvarReserva(reserva);
+    }
+
+    private PricingStrategy selecionarEstrategia(String tipoReserva){
+        switch(tipoReserva.toLowerCase()){
+            case "mensal":
+                return new MensalStrategy();
+            case "anual":
+                return new AnualStrategy();
+            case "diaria":
+            default:
+                return new DiariaStrategy();
+        }
     }
 }

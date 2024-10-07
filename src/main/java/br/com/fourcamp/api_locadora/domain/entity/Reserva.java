@@ -14,4 +14,11 @@ public class Reserva {
     private Veiculo veiculo;
     private String tipoReserva;
     private int quantidade;
+
+    public Reserva(Cliente cliente, Veiculo veiculo, String tipoReserva, int quantidade){
+        this.cliente = cliente;
+        this.veiculo = veiculo;
+        this.tipoReserva = tipoReserva;
+        this.quantidade = quantidade;
+    }
 }

@@ -7,6 +7,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
+import java.util.Optional;
+
 @Repository
 @RequiredArgsConstructor
 public class ContaLocadoraRepositoryImpl implements IContaLocadoraRepository {
@@ -19,5 +21,25 @@ public class ContaLocadoraRepositoryImpl implements IContaLocadoraRepository {
     public void atualizarSaldo(ContaLocadora contaLocadora) {
         String sql = "SELECT atualizar_saldo_locadora(?)";
         jdbcTemplate.update(sql, contaLocadora.getSaldo());
+    }
+
+    @Override
+    public void salvar(ContaLocadora contaLocadora) {
+        String sql = "UPDATE conta_locadora SET saldo = ? WHERE id = ?";
+        jdbcTemplate.update(sql, contaLocadora.getSaldo(), contaLocadora.getId());
+    }
+
+    @Override
+    public Optional<ContaLocadora> findById(Long id) {
+        String sql = "SELECT id, saldo FROM conta_locadora WHERE id = ?";
+        return jdbcTemplate.query(sql, rs -> {
+            if (rs.next()) {
+                ContaLocadora contaLocadora = new ContaLocadora();
+                contaLocadora.setId(rs.getLong("id"));
+                contaLocadora.setSaldo(rs.getDouble("saldo"));
+                return Optional.of(contaLocadora);
+            }
+            return Optional.empty();
+        }, id);
     }
 }
