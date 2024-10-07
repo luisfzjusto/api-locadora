@@ -19,7 +19,7 @@ public class ContaLocadoraRepositoryImpl implements IContaLocadoraRepository {
 
     @Override
     public void atualizarSaldo(ContaLocadora contaLocadora) {
-        String sql = "SELECT atualizar_saldo_locadora(?)";
+        String sql = "CALL atualizar_saldo_locadora(?)";
         jdbcTemplate.update(sql, contaLocadora.getSaldo());
     }
 

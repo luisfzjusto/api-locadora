@@ -6,10 +6,15 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
+import org.springframework.jdbc.core.simple.SimpleJdbcCall;
 import org.springframework.stereotype.Repository;
+import org.springframework.web.bind.annotation.Mapping;
 
 import java.sql.ResultSet;
+import java.sql.Types;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @Repository
@@ -54,7 +59,13 @@ public class VeiculoRepositoryImpl implements IVeiculoRepository {
 
     @Override
     public void atualizarVeiculo(Veiculo veiculo){
-        String sql = "SELECT atualizar_veiculo(?, ?)";
-        jdbcTemplate.update(sql, veiculo.getId(), veiculo.getStatus());
+        SimpleJdbcCall call = new SimpleJdbcCall(jdbcTemplate)
+                .withFunctionName("atualizar_veiculo");
+
+        Map<String, Object> param = new HashMap<>();
+
+        param.put("id_veiculo", veiculo.getId());
+        param.put("status_veiculo", veiculo.getStatus());
+        call.execute(param);
     }
 }
