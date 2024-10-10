@@ -13,4 +13,6 @@ public interface IVeiculoRepository {
     Optional<Veiculo> buscarVeiculoPorPlaca(String placa);
 
     List<Veiculo> listarVeiculosPorStatus(String status);
+
+    void devolverVeiculo(String placa);
 }

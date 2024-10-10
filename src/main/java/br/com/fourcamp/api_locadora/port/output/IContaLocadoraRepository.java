@@ -10,4 +10,6 @@ public interface IContaLocadoraRepository {
     Optional<ContaLocadora> findById(Long id);
 
     void salvar(ContaLocadora contaLocadora);
+
+    double consultarSaldo();
 }

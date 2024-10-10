@@ -42,4 +42,10 @@ public class ContaLocadoraRepositoryImpl implements IContaLocadoraRepository {
             return Optional.empty();
         }, id);
     }
+
+    @Override
+    public double consultarSaldo() {
+        String sql = "SELECT saldo FROM conta_locadora WHERE id = 1";
+        return jdbcTemplate.queryForObject(sql, Double.class);
+    }
 }

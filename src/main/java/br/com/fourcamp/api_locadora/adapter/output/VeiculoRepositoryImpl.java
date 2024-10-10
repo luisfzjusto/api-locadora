@@ -5,6 +5,7 @@ import br.com.fourcamp.api_locadora.port.output.IVeiculoRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.PreparedStatementCallback;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.simple.SimpleJdbcCall;
 import org.springframework.stereotype.Repository;
@@ -67,5 +68,15 @@ public class VeiculoRepositoryImpl implements IVeiculoRepository {
         param.put("id_veiculo", veiculo.getId());
         param.put("status_veiculo", veiculo.getStatus());
         call.execute(param);
+    }
+
+    @Override
+    public void devolverVeiculo(String placa) {
+        String sql = "SELECT devolver_veiculo(?)";
+        jdbcTemplate.execute(sql, (PreparedStatementCallback<Void>) ps -> {
+            ps.setString(1, placa);
+            ps.execute();
+            return null;
+        });
     }
 }

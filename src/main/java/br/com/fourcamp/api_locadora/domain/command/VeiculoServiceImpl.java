@@ -37,4 +37,9 @@ public class VeiculoServiceImpl implements IVeiculoService {
     public List<Veiculo> listarVeiculosPorStatus(String status) {
         return veiculoRepository.listarVeiculosPorStatus(status);
     }
+
+    @Override
+    public void devolverVeiculo(String placa) {
+        veiculoRepository.devolverVeiculo(placa);
+    }
 }
